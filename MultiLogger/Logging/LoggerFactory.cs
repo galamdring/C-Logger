@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Logging
 {
-    static class LoggerFactory
+    public static class LoggerFactory
     {
-        static void CreateLoggers(LogLevelEnum level, Type[] args)
+        public static void CreateLoggers(LogLevelEnum level, Type[] args)
         {
             SetLogLevel(level);
             foreach (Type logger in args)
