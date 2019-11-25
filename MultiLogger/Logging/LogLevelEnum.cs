@@ -1,4 +1,4 @@
-namespace Loggi
+namespace Logging
 {
     /// <summary>
     /// Description of LogLevelEnum.
