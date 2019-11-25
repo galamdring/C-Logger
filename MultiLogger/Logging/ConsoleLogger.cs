@@ -17,7 +17,7 @@ namespace Logging
 
         public void Log(LogLevelEnum level, Exception ex, String message, params Object[] args)
         {
-            Console.WriteLine(String.Format("[{0}] {1} ", level.ToString(), ex.ToString() + '\n' + message), args);
+            Console.WriteLine(String.Format("[{0}] {1} ", level.ToString(), ex.ToString() + Environment.NewLine + message), args);
         }
     }
 }
