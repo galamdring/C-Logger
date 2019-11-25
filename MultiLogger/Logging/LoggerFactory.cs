@@ -1,10 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Logging
 {
     static class LoggerFactory
     {
+        static void CreateLoggers(LogLevelEnum level, Type[] args)
+        {
+            SetLogLevel(level);
+            foreach (Type logger in args)
+            {
+                AddToLoggers(logger);
+            }
+        }
         /// <summary>
         /// This is all the loggers we want to log to.
         /// </summary>
@@ -35,18 +44,21 @@ namespace Logging
             Loggers.Add(instance);
             LoggerTypes.Add(loggerType);
         }
+        /// <summary>
+        /// Returns first Logger of Type T
+        /// </summary>
+        /// <typeparam name="T">Type of logger to search for</typeparam>
+        /// <returns>First ILogger of type <typeparamref name="T"/></returns>
         public static T GetLoggerByType<T>()
         {
             foreach (ILogger logger in Loggers)
             {
                 if (logger.GetType().Equals(typeof(T))) return (T)logger;
             }
-
             return default(T);
         }
         public static ILogger GetLoggerByName(String name)
         {
-            ILogger log = null;
             if (String.IsNullOrEmpty(name)) name = "MultiLogger";
             return GetNewLogger(name);
         }
@@ -74,6 +86,28 @@ namespace Logging
                 {
                     logger.Log(level, ex, name + ":" + message, args);
                 }
+            }
+        }
+        /// <summary>
+        /// Removes all loggers of given type <T>.
+        /// </summary>
+        public static void RemoveLogger<T>()
+        {
+            foreach (ILogger logger in Loggers.ToList())
+            {
+                try
+                {
+                    var temp = (T)logger;
+                    if (temp != null)
+                    {
+                        Loggers.Remove(logger);
+                    }
+                }
+                catch
+                {
+                    continue;
+                }
+
             }
         }
     }

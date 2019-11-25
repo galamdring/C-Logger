@@ -13,33 +13,9 @@ namespace Logging
         private String name = "";
         private LogLevelEnum logLevel;
 
-        public MultiLogger(LogLevelEnum level, String name, Type[] args)
-        {
-            if (String.IsNullOrEmpty(name)) name = "MultiLogger";
-            LoggerFactory.SetLogLevel(level);
-            foreach (Type logger in args)
-            {
-                LoggerFactory.AddToLoggers(logger);
-            }
-            
-            
-            //Info("Created logger with LogLevel " + LogLevel.ToString());
-        }
-
-        public MultiLogger(LogLevelEnum logLevel, String name)
-        {
-            LoggerFactory.SetLogLevel(logLevel);
-            this.name = name;
-        }
-
         public MultiLogger(String name) => this.name = name;
 
         public String Name { get => name; set => name = value; }
-
-        private String AddNameToMessage(String message)
-        {
-            return name + ": " + message;
-        }
                
         public ILogger GetILogger(String name)
         {
@@ -98,30 +74,5 @@ namespace Logging
           LoggerFactory.Log(name,level,ex,message,args);
         }
         
-        
-
-
-         /// <summary>
-        /// Removes all loggers of given type <T>.
-        /// </summary>
-        public static void RemoveLogger<T>()
-        {
-            foreach(ILogger logger in Loggers.ToList())
-            {
-                try
-                {
-                    var temp = (T)logger;
-                    if (temp != null)
-                    {
-                        Loggers.Remove(logger);
-                    }
-                }
-                catch
-                {
-                    continue;
-                }
-                
-            }
-        }
     }
 }
