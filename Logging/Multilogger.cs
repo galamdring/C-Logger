@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace ContextProviderService.Logging
+namespace Logging
 {
     public class MultiLogger : ILogger
     {
@@ -49,14 +49,14 @@ namespace ContextProviderService.Logging
 
         public static void AddToLoggers(Type loggerType)
         {
-            if (LoggerTypes.Contains(loggerType))
-            {
-                //We already have this logger type, we can safely ignore being asked to add it again.
-                return;
-            }
-            ILogger instance = (ILogger)Activator.CreateInstance(loggerType, LogLevel, "MultiLogger");
-            Loggers.Add(instance);
-            LoggerTypes.Add(loggerType);
+          if (LoggerTypes.Contains(loggerType))
+          {
+              //We already have this logger type, we can safely ignore being asked to add it again.
+              return;
+          }
+          ILogger instance = (ILogger)Activator.CreateInstance(loggerType, LogLevel, "MultiLogger");
+          Loggers.Add(instance);
+          LoggerTypes.Add(loggerType);
 
             
         }
