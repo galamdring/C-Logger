@@ -15,7 +15,11 @@ namespace Logging
             }
         }
         /// <summary>
-        /// This is all the loggers we want to log to.
+        /// This is all the loggers we have created.
+        /// </summary>
+        static List<MultiLogger> NamedLoggers = new List<MultiLogger>();
+        /// <summary>
+        /// These are the instances of the loggers
         /// </summary>
         static List<ILogger> Loggers = new List<ILogger>();
         /// <summary>
@@ -40,7 +44,7 @@ namespace Logging
                 //We already have this logger type, we can safely ignore being asked to add it again.
                 return;
             }
-            ILogger instance = (ILogger)Activator.CreateInstance(loggerType, LogLevel, "MultiLogger");
+            ILogger instance = (ILogger)Activator.CreateInstance(loggerType);
             Loggers.Add(instance);
             LoggerTypes.Add(loggerType);
         }
@@ -57,14 +61,26 @@ namespace Logging
             }
             return default(T);
         }
-        public static ILogger GetLoggerByName(String name)
+        /// <summary>
+        /// Try to find Multilogger that 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public static MultiLogger GetLoggerByName(String name)
         {
             if (String.IsNullOrEmpty(name)) name = "MultiLogger";
+            MultiLogger instance = NamedLoggers.Find(x => x.Name.Equals(name));
+            if (instance != null)
+            {
+                return instance;
+            }
             return GetNewLogger(name);
         }
         public static MultiLogger GetNewLogger(String name)
         {
-            return new MultiLogger(name);
+            var instance = new MultiLogger(name);
+            NamedLoggers.Add(instance);
+            return instance;
         }
 
         public static void Log(String name, LogLevelEnum level, String message, params Object[] args)
